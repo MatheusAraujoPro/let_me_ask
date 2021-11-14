@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { database } from '../services/firebase'
 
 
@@ -14,6 +14,7 @@ export function NewRoom() {
 
     const [newRoom, setNewRoom] = useState('')
     const { user } = useAuth()
+    let navigate = useNavigate()
 
 
     const handleCreateRoom = async (event: FormEvent) => {
@@ -25,7 +26,9 @@ export function NewRoom() {
         const firebaseRoom = await roomRef.push({
             title: newRoom,
             authorId: user?.id
-        })
+        })      
+
+        navigate(`/rooms/${firebaseRoom.key}`)
     }
 
     const handleNewRoom = (value: string) => {
@@ -52,7 +55,7 @@ export function NewRoom() {
                             onChange={event => handleNewRoom(event.target.value)}
                          />
                          <Button type="submit">
-                            Entrar na Sala
+                            Criar Sala
                          </Button>                       
                      </form>
                      <p>

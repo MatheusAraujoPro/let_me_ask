@@ -1,6 +1,7 @@
-import { useContext, useEffect } from 'react';
+import { FormEvent, useContext, useState  } from 'react';
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContextProvider';
+import { database } from '../services/firebase'
 
 import illustrationImg from '../assets/illustration.svg';
 import logo from '../assets/logo.svg';
@@ -8,10 +9,12 @@ import googleIconImg from '../assets/google-icon.svg'
 import '../styles/auth.scss'
 
 import { Button } from '../components/Button';
-import { auth } from '../services/firebase';
+
 
 export function Home() {
     let navigate = useNavigate()
+    const [roomCode, setRoomCode] = useState('')
+    
     const { user, signInWithGoogle} = useContext(AuthContext)
 
     const handleCreateRoom = async () => {
@@ -22,6 +25,21 @@ export function Home() {
         console.log(user);        
         navigate('/rooms/new')       
     }
+
+    const handleJoinRoom = async (event: FormEvent) => {
+        event.preventDefault()
+        const roomRef = await database.ref(`rooms/${roomCode}`).get()
+
+        if(!roomRef.exists()) return alert('Sala não existe')
+
+        navigate(`/rooms/${roomCode}`)
+    }
+
+    const handleRoomCode = (value: string) => {
+        if(value.trim() === '') return 
+        
+        setRoomCode(value)
+     } 
 
     return (
         <div id="page-auth">
@@ -38,14 +56,13 @@ export function Home() {
                          Crie sua Sala com o Google
                      </button>
                      <div className="separator">Ou entre em uma sala</div>
-                     <form>
+                     <form onSubmit={handleJoinRoom}>
                          <input 
                             type="text"
                             placeholder="Digite o Código da Sala"
+                            onChange={event => handleRoomCode(event.target.value)}
                          />
-                         <Button 
-                            type="submit"
-                            title="Cadastrar"
+                         <Button type="submit"                 
                          >
                             Entrar na Sala
                          </Button>                       
