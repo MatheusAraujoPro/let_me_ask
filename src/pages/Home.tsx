@@ -43,7 +43,10 @@ export function Home() {
                             type="text"
                             placeholder="Digite o Código da Sala"
                          />
-                         <Button type="submit">
+                         <Button 
+                            type="submit"
+                            title="Cadastrar"
+                         >
                             Entrar na Sala
                          </Button>                       
                      </form>
