@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'
-import { AuthContext } from '../App';
+import { AuthContext } from '../context/AuthContextProvider';
 
 import illustrationImg from '../assets/illustration.svg';
 import logo from '../assets/logo.svg';
